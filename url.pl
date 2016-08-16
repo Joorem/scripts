@@ -4,11 +4,18 @@
 
 use strict;
 use warnings;
+use Getopt::Std;
 use URI::Escape;
 
-my $BASE_DIR = defined($ARGV[0]) ? $ARGV[0] : '.';
-my $BASE_URL = defined($ARGV[2]) ? $ARGV[2] : 'https://joworld.net/';
-my $SEARCH = defined($ARGV[1]) ? $ARGV[1] : '';
+# opts
+my %opts;
+getopts('h', \%opts);
+defined($opts{'h'}) and usage();
+
+# vars
+my $SEARCH = shift || '';
+my $BASE_DIR = shift || '.';
+my $BASE_URL = shift || 'https://joworld.net/storage/';
 
 # subs
 sub doURL {
@@ -31,15 +38,11 @@ sub doURL {
 }
 
 sub usage {
-  print STDERR "$0 <directory> <search> [<url>]\n";
+  print STDERR "$0 [<search>] [<directory>] [<url>]\n";
 
   exit 1;
 }
 
-# work
-if (scalar @ARGV < 2) {
-  usage();
-}
-
+# start
 chdir($BASE_DIR);
 doURL($BASE_DIR);
